@@ -23,6 +23,9 @@ WaveshareEPaper = waveshare_epaper_ns.class_(
 WaveshareEPaperTypeA = waveshare_epaper_ns.class_(
     "WaveshareEPaperTypeA", WaveshareEPaper
 )
+WaveshareEPaper2P9InV2P1 = waveshare_epaper_ns.class_(
+    "WaveshareEPaper2P9InV2P1", WaveshareEPaper
+)
 WaveshareEPaper2P7In = waveshare_epaper_ns.class_(
     "WaveshareEPaper2P7In", WaveshareEPaper
 )
@@ -85,16 +88,17 @@ MODELS = {
     "7.50inv2alt": ("b", WaveshareEPaper7P5InV2alt),
     "7.50in-hd-b": ("b", WaveshareEPaper7P5InHDB),
     "2.13in-ttgo-dke": ("c", WaveshareEPaper2P13InDKE),
+    "2.90inv2.1": ("d", WaveshareEPaper2P9InV2P1),
 }
 
 
 def validate_full_update_every_only_type_a(value):
     if CONF_FULL_UPDATE_EVERY not in value:
         return value
-    if MODELS[value[CONF_MODEL]][0] == "b":
+    if MODELS[value[CONF_MODEL]][0] not in ("a", "d"):
         raise cv.Invalid(
             "The 'full_update_every' option is only available for models "
-            "'1.54in', '1.54inV2', '2.13in', '2.90in', and '2.90inV2'."
+            "'1.54in', '1.54inV2', '2.13in', '2.90in', '2.90inV2' and '2.90inV2.1'."
         )
     return value
 
@@ -126,7 +130,7 @@ async def to_code(config):
     if model_type == "a":
         rhs = WaveshareEPaperTypeA.new(model)
         var = cg.Pvariable(config[CONF_ID], rhs, WaveshareEPaperTypeA)
-    elif model_type in ("b", "c"):
+    elif model_type in ("b", "c", "d"):
         rhs = model.new()
         var = cg.Pvariable(config[CONF_ID], rhs, model)
     else:

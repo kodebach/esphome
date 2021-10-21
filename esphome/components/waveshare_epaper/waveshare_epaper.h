@@ -117,6 +117,27 @@ class WaveshareEPaperTypeA : public WaveshareEPaper {
   uint32_t idle_timeout_() override;
 };
 
+class WaveshareEPaper2P9InV2P1 : public WaveshareEPaperTypeA {
+ public:
+  WaveshareEPaper2P9InV2P1() : WaveshareEPaperTypeA(WAVESHARE_EPAPER_2_9_IN_V2) {}
+
+  void initialize() override;
+
+  void display() override;
+
+  void deep_sleep() override;
+
+  void dump_config() override;
+
+ protected:
+  int get_width_internal() override { return 128; }
+
+  int get_height_internal() override { return 296; }
+
+  bool power_is_on_{false};
+  bool hibernating_{false};
+};
+
 enum WaveshareEPaperTypeBModel {
   WAVESHARE_EPAPER_2_7_IN = 0,
   WAVESHARE_EPAPER_4_2_IN,
